@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <embed src="dark-forest.mp3" autostart="true" loop = "true" type="audio/mpeg" >
+
     <meta charset="utf-8" />
     <title>My first three.js app</title>
     <style>
@@ -19,9 +19,13 @@
         z-index: 100;
         display: block;
       }
+      #audio{
+        display:none;
+      }
     </style>
   </head>
   <body>
+    <audio src="dark-forest.mp3" autoplay=true loop = true></audio>
     <div id= "info">
       <div id="health"></div>
       <div id="score"></div>
