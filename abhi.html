@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <title>My first three.js app</title>
+  <style>
+    body {
+      margin: 0;
+    }
+
+    canvas {
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+  <script src="js/three.js"></script>
+  <script type="module" src="js/GLTFLoader.js"></script>
+
+  <!-- <script src="js/GLTFLoader.js"></script> -->
+  <script type="module">
+    // Our Javascript will go here.
+    // import GLTFLoader from 'js/GLTFLoader.js';
+    // import * as THREE from './node_modules/three';
+    import { GLTFLoader } from './js/GLTFLoader.js'
+    var lasers = []
+    var player_health = 5
+
+    var enemies = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    var scene = new THREE.Scene();
+    var camera = new THREE.PerspectiveCamera(
+      75,
+      window.innerWidth / window.innerHeight,
+      0.01,
+      1000
+    );
+
+
+    var renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    // const geometry = new THREE.BoxGeometry();
+    // const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+    // const cube = new THREE.Mesh( geometry, material );
+    // scene.add( cube );
+
+
+    // camera.position.z = 5;
+
+    var loader = new GLTFLoader();
+    var player;
+    loader.load('plane.gltf', function (gltf) {
+      player = gltf.scene;
+      player.scale.set(2.5, 2.5, 2.5)
+      scene.add(player);
+    });
+
+    // CLOSE YOUR EYES YOU DON'T WANT TO SEE THIS
+
+    var enemyloader = new GLTFLoader();
+    enemyloader.load('evil.gltf', function (gltf) {
+      enemies[0] = gltf.scene;
+      enemies[0].rotation.y = 3.141592653589793238
+      enemies[0].position.x = 100
+      enemies[0].position.y = 0
+      enemies[0].position.z = 0
+      scene.add(enemies[0]);
+    });
+    // console.log(0)
+    // console.log(enemies)
+
+    var enemyloader = new GLTFLoader();
+    enemyloader.load('evil.gltf', function (gltf) {
+      enemies[1] = gltf.scene;
+      enemies[1].rotation.y = 3.141592653589793238
+      enemies[1].position.x = 70
+      enemies[1].position.y = 0
+      enemies[1].position.z = -70
+      scene.add(enemies[1]);
+    });
+    // console.log(0)
+    // console.log(enemies)
+
+    var enemyloader = new GLTFLoader();
+    enemyloader.load('evil.gltf', function (gltf) {
+      enemies[2] = gltf.scene;
+      enemies[2].rotation.y = 3.141592653589793238
+      enemies[2].position.x = 70
+      enemies[2].position.y = 0
+      enemies[2].position.z = 70
+      scene.add(enemies[2]);
+    });
+    // console.log(0)
+    // console.log(enemies)
+
+    // enemy.position.set(10,0,0)
+    // enemy.rotation.set(0, 3.141592653589793238, 0)
+    scene.background = new THREE.Color(0xd4d4d4)
+    var light = new THREE.HemisphereLight(0xffffff, 0x000000, 2);
+    scene.add(light);
+    var deg2rad = 3.141592653589793238 / 180
+    camera.position.set(-60, 150, 0)
+    camera.rotation.set(-1.5707963267948966, -0.4048917862850835, -1.5707963267948966)
+
+    function onKeyDown(event) {
+      if (event.key == 'w') {
+        player.position.x += 1
+        player.rotation.z = -15 * deg2rad
+        player.rotation.x = 0
+      }
+      else if (event.key == 's') {
+        player.position.x -= 1
+        player.rotation.z = 15 * deg2rad
+        player.rotation.x = 0
+      }
+      else if (event.key == 'a') {
+        player.position.z -= 1
+        player.rotation.x = -15 * deg2rad
+        player.rotation.z = 0
+      }
+      else if (event.key == 'd') {
+        player.position.z += 1
+        player.rotation.x = 15 * deg2rad
+        player.rotation.z = 0
+      }
+      else if (event.key == 'i') {
+        enemy.position.x += 1
+      }
+      else if (event.key == 'k') {
+        enemy.position.x -= 1
+      }
+      else if (event.key == 'j') {
+        enemy.position.z -= 1
+      }
+      else if (event.key == 'l') {
+        enemy.position.z += 1
+      }
+      else if (event.key == 'f') {
+        enemy.rotation.y += 3.141592653589793238 / 2
+      }
+      else if (event.key == 'r') {
+        player.position.set(0, 0, 0)
+        enemy.position.set(0, 0, 0)
+        camera.position.set(-60, 150, 0)
+        camera.rotation.set(-1.5707963267948966, -0.4048917862850835, -1.5707963267948966)
+      }
+      else if (event.key == 't') {
+        camera.lookAt((player.position.x + enemy.position.x) / 2, 15, 0)
+        console.log(camera.rotation)
+      }
+      else if (event.key == '\'') {
+        // shoot
+        // console.log("helo")
+        var laserloader = new GLTFLoader();
+        var laser;
+        laserloader.load('laser.gltf', function (gltf) {
+          laser = gltf.scene;
+          laser.position.x = player.position.x
+          laser.position.y = player.position.y
+          laser.position.z = player.position.z
+          scene.add(laser);
+          lasers.push(laser)
+        });
+        // console.log(lasers)
+      }
+    }
+    document.addEventListener('keydown', onKeyDown, false);
+
+    function onKeyUp(event) {
+      player.rotation.set(0, 0, 0)
+    }
+    document.addEventListener('keyup', onKeyUp, false);
+
+    function coll_check(obj1, obj2, t1, t2) {
+      // bounds along x and z
+      var bounds = [
+        [0.5, 4],     //laser
+        [5 * 2.5, 8.8 * 2.5],     //player
+        [9.75, 16.5]  //enemy
+      ]
+      if (((bounds[t1][0] + bounds[t2][0]) > Math.abs((obj1.position.x - obj2.position.x))) && ((bounds[t1][1] + bounds[t2][1]) > Math.abs((obj1.position.z - obj2.position.z)))) {
+        console.log("HIT")
+        if (t1 != 1) {
+          obj1.position.x = 1000
+          scene.remove(obj1)
+        }
+        else {
+          player_health--
+          if (player_health <= 0) {
+            scene.remove(player)
+            //end game
+          }
+        }
+        if (t2 != 1) {
+          obj2.position.x = 1000
+          scene.remove(obj2)
+        }
+        else {
+          player_health--
+          if (player_health <= 0) {
+            scene.remove(player)
+            //end game
+          }
+        }
+        return true
+      }
+      return false
+    }
+
+    function animate() {
+      requestAnimationFrame(animate);
+
+      // cube.rotation.x += 0.01;
+      // cube.rotation.y += 0.01;
+      for (var i = 0; i < lasers.length; i++) {
+        // console.log(i)
+        var flag = false
+        for (var j = 0; j < 3; j++) {
+          if (enemies[j].position.x < 1000 && lasers[i].position.x <= 300)
+            flag = (coll_check(enemies[j], lasers[i], 2, 0) || flag)
+        }
+        if (flag)
+          continue
+        if (lasers[i].position.x > 300) {
+          //delete
+          scene.remove(lasers[i])
+        }
+        else {
+          lasers[i].position.x += 1
+        }
+      }
+
+      renderer.render(scene, camera);
+    };
+
+    animate();
+  </script>
+</body>
+
+</html>
