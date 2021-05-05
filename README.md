@@ -1,3 +1,7 @@
+# What is this
+
+This is a game that you can run on your browser
+
 # How to Run
 
 Start the `home.html` file using a live server (through VScode).
