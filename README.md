@@ -1,6 +1,6 @@
 # What is this
 
-This is a game that you can run on your browser
+This is a pretty cool shooter game that you can run on your browser. It has planes, bullets and monkey like objects. Pretty all over the place.
 
 # How to Run
 
@@ -15,12 +15,13 @@ https://drive.google.com/file/d/10ogpSBj1Xa0_qJ5_T7ZS_5-aVIdpbZ7_/view?usp=shari
 # Controls
 
 `wasd` - move player
+
 `;` - shoot
 
 # objects
 - Player
 - Enemy - They shoot bullets at you
-- monke star - This is something oyu can collect to gain score
+- monke star - This is something you can collect to gain score
 
 # About 
 
@@ -32,4 +33,10 @@ The player has 5 lives, and he loses a life every time he gets hit by an enemy b
 
 Every time he collects a star he gains points
 
-There is background music
+The background music is bomb, you might have to change some browser settings to hear it though.
+
+
+# Gameplay
+
+![](./images/g1.png)
+![](./images/g2.png)
